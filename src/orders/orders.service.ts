@@ -8,7 +8,7 @@ export class OrdersService {
     return db.orders;
   }
 
-  public create(orderData: Omit<Order, 'id' | 'productId'>): Order {
+  public create(orderData: Omit<Order, 'id'>): Order {
     const newOrder = { ...orderData, id: uuidv4(), productId: uuidv4() };
     db.orders.push(newOrder);
     return newOrder;
@@ -20,7 +20,7 @@ export class OrdersService {
 
   public updateById(
       id: Order['id'],
-      orderData: Omit<Order, 'id' | 'productId'>,
+      orderData: Omit<Order, 'id'>,
   ): void {
     db.orders = db.orders.map((order) => {
       if (order.id === id) {
