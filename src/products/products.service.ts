@@ -13,8 +13,18 @@ export class ProductsService {
     db.products.push(newProduct);
     return newProduct;
   }
+
   public getById(id: string): Product | null {
-    return db.products.find((p) => p.id === id);
+    return db.products.find((product) => product.id === id);
+  }
+
+  public updateById(id: Product['id'], productData: Omit<Product, 'id'>): void {
+    db.products = db.products.map((product) => {
+      if (product.id === id) {
+        return { ...product, ...productData };
+      }
+      return product;
+    });
   }
 
   public delete(id: string): void {
