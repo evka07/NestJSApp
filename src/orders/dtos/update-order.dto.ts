@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsString, Length } from 'class-validator';
 import { Product } from '@prisma/client';
 
-export class CreateOrderDTO {
+export class UpdateOrderDTO {
   @IsString()
   productId: Product['id'];
 
@@ -12,6 +12,6 @@ export class CreateOrderDTO {
 
   @IsNotEmpty()
   @IsString()
-  @Length(10, 25)
+  @Length(10, 20)
   address: string;
 }
