@@ -1,42 +1,62 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/shared/interceptors/services/prisma.service';
 import { Product } from '@prisma/client';
-import { PrismaService } from '../shared/services/prisma.service';
+
 
 @Injectable()
 export class ProductsService {
+
   constructor(private prismaService: PrismaService) {}
 
-  public getAll(): Promise<Product[]> {
-    return this.prismaService.product.findMany();
-  }
 
-  public getById(id: Product['id']): Promise<Product | null> {
-    return this.prismaService.product.findUnique({
-      where: { id },
-    });
-  }
+public getAllExtended(): Promise<Product[]> {
+  return this.prismaService.product.findMany({
+    include: { orders: true },
+  });
+}
+
+public getAllProducts(): Promise<Product[]> {
+  return this.prismaService.product.findMany({
+  });
+}
+
+
+public getExtendedById(id: Product['id']): Promise<Product | null> {
+  return this.prismaService.product.findUnique({
+    where: { id },
+    include: { orders: true },
+  });
+}
+
+
+public getById(id: Product['id']): Promise<Product | null> {
+  return this.prismaService.product.findUnique({
+    where: { id },
+  });
+}
+
 
   public deleteById(id: Product['id']): Promise<Product> {
-    return this.prismaService.product.delete({
-      where: { id },
-    });
-  }
+  return this.prismaService.product.delete({
+    where: { id },
+  });
+}
 
-  public create(
-    productData: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>,
+public create(
+  productData: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>,
   ): Promise<Product> {
-    return this.prismaService.product.create({
-      data: productData,
-    });
-  }
+  return this.prismaService.product.create({
+    data: productData,
+  });
+}
 
   public updateById(
-    id: Product['id'],
-    productData: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>,
+  id: Product['id'],
+  productData: Omit<Product, 'id' | 'createdAt' | 'updatedAt'>,
   ): Promise<Product> {
-    return this.prismaService.product.update({
-      where: { id },
-      data: productData,
-    });
-  }
+  return this.prismaService.product.update({
+    where: { id },
+    data: productData,
+  });
+}
 }
